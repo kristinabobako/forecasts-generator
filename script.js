@@ -14,9 +14,10 @@
 
 /* Для добавления предсказания в список воспользуйся шаблоном forecast-item */
 
-const forecastBtn = document.querySelector(".forecast-btn"); 
-const currentForecastPrediction = document.querySelector("h1");
-const currentForecastPercend = document.querySelector("p");
+const forecastBtn = document.querySelector(".forecast-btn");
+const currentForecastDiv = document.querySelector(".current-forecast");
+const currentForecastPrediction = currentForecastDiv.querySelector("h1");
+const currentForecastPercent = currentForecastDiv.querySelector("p");
 
 const template = document.querySelector("#forecast-item");
 const myPredictionContainer = document.querySelector(".forecasts");
@@ -25,17 +26,7 @@ function getRandom(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 };
 
-function insertMyPredictions(predictionText, predictionPercentText) {
-    const myPredictions = template.content.cloneNode(true);
-
-    myPredictions.querySelector("h3").textContent = predictionText;
-    myPredictions.querySelector("p").textContent = predictionPercentText;
-
-    return myPredictions;
-};
-
-forecastBtn.addEventListener('click', function() {
-
+function generateNewPrediction() {
     const predictionRandom = getRandom(1, 6);
     let predictionText = "";
 
@@ -53,16 +44,25 @@ forecastBtn.addEventListener('click', function() {
         predictionText = "Кто-то поделиться с тобой позитивом!";
     };
 
-    currentForecastPrediction.textContent = predictionText; //
+    currentForecastPrediction.textContent = predictionText;
 
     let predictionPercent = getRandom(1, 101);
-
     let predictionPercentText = `Вероятность исполнения предсказания ${predictionPercent}%.`;
 
-    currentForecastPercend.textContent = predictionPercentText; //
+    currentForecastPercent.textContent = predictionPercentText;
 
-    forecastBtn.addEventListener('click', function() {
-        const oldPrediction = insertMyPredictions(predictionText, predictionPercentText);
-        myPredictionContainer.prepend(oldPrediction);
-    });
+    savePredictionToList(predictionText, predictionPercentText);
+};
+
+function savePredictionToList(predictionText, predictionPercentText) {
+    const myPredictions = template.content.cloneNode(true);
+
+    myPredictions.querySelector("h3").textContent = predictionText;
+    myPredictions.querySelector("p").textContent = predictionPercentText;
+
+    return myPredictionContainer.prepend(myPredictions);
+};
+
+forecastBtn.addEventListener('click', function () {
+    generateNewPrediction();
 });
