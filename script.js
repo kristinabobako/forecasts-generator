@@ -14,19 +14,19 @@
 
 /* Для добавления предсказания в список воспользуйся шаблоном forecast-item */
 
-const forecastBtn = document.querySelector(".forecast-btn");
-const currentForecastDiv = document.querySelector(".current-forecast");
-const currentForecastPrediction = currentForecastDiv.querySelector("h1");
-const currentForecastPercent = currentForecastDiv.querySelector("p");
+const forecastBtn = document.querySelector(".forecast-btn"); 
+const currentForecastDiv = document.querySelector(".current-forecast"); 
+const currentForecastPrediction = currentForecastDiv.querySelector("h1"); 
+const currentForecastPercent = currentForecastDiv.querySelector("p"); 
 
-const template = document.querySelector("#forecast-item");
-const myPredictionContainer = document.querySelector(".forecasts");
+const template = document.querySelector("#forecast-item"); 
+const myPredictionContainer = document.querySelector(".forecasts"); 
 
-function getRandom(min, max) {
+function getRandom(min, max) { 
     return Math.floor(Math.random() * (max - min)) + min;
 };
 
-function generateNewPrediction() {
+function generateNewPrediction() { 
     const predictionRandom = getRandom(1, 6);
     let predictionText = "";
 
@@ -46,23 +46,28 @@ function generateNewPrediction() {
 
     currentForecastPrediction.textContent = predictionText;
 
-    let predictionPercent = getRandom(1, 101);
-    let predictionPercentText = `Вероятность исполнения предсказания ${predictionPercent}%.`;
-
+    const predictionPercent = getRandom(1, 101);
+    const predictionPercentText = `Вероятность исполнения предсказания ${predictionPercent}%.`;
     currentForecastPercent.textContent = predictionPercentText;
-
-    savePredictionToList(predictionText, predictionPercentText);
 };
 
-function savePredictionToList(predictionText, predictionPercentText) {
+function savePredictionToList() {
+    const title = currentForecastDiv.querySelector("h1").textContent;
+    const text = currentForecastDiv.querySelector("p").textContent;
+  
+    if (!title && !text) {
+      return;
+    } else {
     const myPredictions = template.content.cloneNode(true);
 
-    myPredictions.querySelector("h3").textContent = predictionText;
-    myPredictions.querySelector("p").textContent = predictionPercentText;
+    myPredictions.querySelector("h3").textContent = currentForecastDiv.querySelector("h1").textContent;
+    myPredictions.querySelector("p").textContent = currentForecastDiv.querySelector("p").textContent;
 
     return myPredictionContainer.prepend(myPredictions);
+    };
 };
 
-forecastBtn.addEventListener('click', function () {
-    generateNewPrediction();
+forecastBtn.addEventListener('click', function(event) {
+  savePredictionToList();
+  generateNewPrediction();
 });
